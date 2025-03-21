@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalmaMente - Autenticación</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+        
+        h1 {
+            color: #3b82f6;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        button:hover {
+            background-color: #2563eb;
+        }
+        
+        .auth-toggle {
+            margin-top: 1rem;
+            text-align: center;
+            color: #6b7280;
+        }
+        
+        .auth-toggle a {
+            color: #3b82f6;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-peace"></i>
+            <h1>CalmaMente</h1>
+        </div>
+        
+        <!-- Formulario de inicio de sesión -->
+        <div id="login-form">
+            <h2 style="text-align: center; margin-bottom: 1.5rem; color: #4b5563;">Iniciar Sesión</h2>
+            
+            <div class="form-group">
+                <label for="login-email">Correo electrónico</label>
+                <input type="email" id="login-email" placeholder="ejemplo@correo.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="login-password">Contraseña</label>
+                <input type="password" id="login-password" placeholder="Contraseña" required>
+            </div>
+            
+            <button id="login-button">Iniciar Sesión</button>
+            
+            <div class="error-message" id="login-error"></div>
+            
+            <div class="auth-toggle">
+                ¿No tienes una cuenta? <a id="show-register">Regístrate</a>
+            </div>
+        </div>
+        
+        <!-- Formulario de registro -->
+        <div id="register-form" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 1.5rem; color: #4b5563;">Registrarse</h2>
+            
+            <div class="form-group">
+                <label for="register-email">Correo electrónico</label>
+                <input type="email" id="register-email" placeholder="ejemplo@correo.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="register-password">Contraseña</label>
+                <input type="password" id="register-password" placeholder="Contraseña (mínimo 6 caracteres)" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="register-confirm-password">Confirmar contraseña</label>
+                <input type="password" id="register-confirm-password" placeholder="Confirmar contraseña" required>
+            </div>
+            
+            <button id="register-button">Registrarse</button>
+            
+            <div class="error-message" id="register-error"></div>
+            
+            <div class="auth-toggle">
+                ¿Ya tienes una cuenta? <a id="show-login">Inicia sesión</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Font Awesome para iconos -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <!-- Firebase -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6rG4W0b3vGW67lWW51CzGKzEPau0HsAw",
+            authDomain: "calmamente-12c56.firebaseapp.com",
+            projectId: "calmamente-12c56",
+            storageBucket: "calmamente-12c56.firebasestorage.app",
+            messagingSenderId: "1085057394046",
+            appId: "1:1085057394046:web:55060b389e27d3fe0fbf2f",
+            measurementId: "G-1N0E8M1VTB"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth();
+        
+        // Verificar si el usuario ya está autenticado
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Si el usuario está autenticado, redirigir a la página principal
+                window.location.href = "index.html";
+            }
+        });
+        
+        // Cambiar entre formularios de login y registro
+        document.getElementById("show-register").addEventListener("click", () => {
+            document.getElementById("login-form").style.display = "none";
+            document.getElementById("register-form").style.display = "block";
+        });
+        
+        document.getElementById("show-login").addEventListener("click", () => {
+            document.getElementById("register-form").style.display = "none";
+            document.getElementById("login-form").style.display = "block";
+        });
+        
+        // Manejo de registro
+        document.getElementById("register-button").addEventListener("click", () => {
+            const email = document.getElementById("register-email").value;
+            const password = document.getElementById("register-password").value;
+            const confirmPassword = document.getElementById("register-confirm-password").value;
+            const errorElement = document.getElementById("register-error");
+            
+            // Validar que las contraseñas coincidan
+            if (password !== confirmPassword) {
+                errorElement.textContent = "Las contraseñas no coinciden";
+                return;
+            }
+            
+            // Validar que la contraseña tenga al menos 6 caracteres
+            if (password.length < 6) {
+                errorElement.textContent = "La contraseña debe tener al menos 6 caracteres";
+                return;
+            }
+            
+            // Crear usuario con email y contraseña
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Usuario registrado correctamente
+                    window.location.href = "index.html";
+                })
+                .catch((error) => {
+                    // Manejar errores de registro
+                    const errorCode = error.code;
+                    let errorMessage = "Error al registrarse";
+                    
+                    if (errorCode === "auth/email-already-in-use") {
+                        errorMessage = "El correo electrónico ya está en uso";
+                    } else if (errorCode === "auth/invalid-email") {
+                        errorMessage = "Correo electrónico inválido";
+                    } else if (errorCode === "auth/weak-password") {
+                        errorMessage = "La contraseña es demasiado débil";
+                    }
+                    
+                    errorElement.textContent = errorMessage;
+                });
+        });
+        
+        // Manejo de inicio de sesión
+        document.getElementById("login-button").addEventListener("click", () => {
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+            const errorElement = document.getElementById("login-error");
+            
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Usuario autenticado correctamente
+                    window.location.href = "index.html";
+                })
+                .catch((error) => {
+                    // Manejar errores de inicio de sesión
+                    const errorCode = error.code;
+                    let errorMessage = "Error al iniciar sesión";
+                    
+                    if (errorCode === "auth/invalid-email") {
+                        errorMessage = "Correo electrónico inválido";
+                    } else if (errorCode === "auth/user-disabled") {
+                        errorMessage = "Usuario deshabilitado";
+                    } else if (errorCode === "auth/user-not-found" || errorCode === "auth/wrong-password") {
+                        errorMessage = "Correo electrónico o contraseña incorrectos";
+                    }
+                    
+                    errorElement.textContent = errorMessage;
+                });
+        });
+    </script>
+</body>
+</html>
