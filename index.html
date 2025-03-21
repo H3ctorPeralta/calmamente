@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalmaMente - Bienestar Laboral</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Estilos del header */
+        header {
+            background-color: #3b82f6;
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo i {
+            margin-right: 0.5rem;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-email {
+            margin-right: 1rem;
+        }
+        
+        .logout-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Estilos del menú de navegación */
+        nav {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-item {
+            margin: 0.5rem;
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-item i {
+            margin-right: 0.5rem;
+            font-size: 1.25rem;
+        }
+        
+        .nav-item:hover {
+            background-color: #f3f4f6;
+            color: #3b82f6;
+        }
+        
+        .nav-item.active {
+            background-color: #ebf5ff;
+            color: #3b82f6;
+        }
+        
+        /* Estilos del contenido principal */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            flex-grow: 1;
+        }
+        
+        .welcome-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-card h1 {
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        
+        .welcome-card p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card-icon {
+            background-color: #ebf5ff;
+            color: #3b82f6;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            color: #4b5563;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-card p {
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        /* Estilos del footer */
+        footer {
+            background-color: #f3f4f6;
+            padding: 1.5rem;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: auto;
+        }
+        
+        /* Estilos responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+            
+            .nav-content {
+                flex-direction: column;
+            }
+            
+            .nav-item {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-peace"></i>
+                <span>CalmaMente</span>
+            </div>
+            <div class="user-info">
+                <span class="user-email" id="user-email"></span>
+                <button class="logout-button" id="logout-button">Cerrar sesión</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Menú de navegación -->
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="nav-item active">
+                <i class="fas fa-home"></i>
+                Inicio
+            </a>
+            <a href="test_nom035.html" class="nav-item">
+                <i class="fas fa-clipboard-check"></i>
+                Test NOM-035
+            </a>
+            <a href="pausas_activas.html" class="nav-item">
+                <i class="fas fa-walking"></i>
+                Pausas activas
+            </a>
+            <a href="diario_emocional.html" class="nav-item">
+                <i class="fas fa-book"></i>
+                Diario emocional
+            </a>
+            <a href="consejos_breves.html" class="nav-item">
+                <i class="fas fa-lightbulb"></i>
+                Consejos breves
+            </a>
+            <a href="checklist_nom035.html" class="nav-item">
+                <i class="fas fa-tasks"></i>
+                Checklist NOM-035
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Contenido principal -->
+    <main>
+        <div class="welcome-card">
+            <h1>Bienvenido/a a CalmaMente</h1>
+            <p>Tu plataforma integral para el bienestar laboral en cumplimiento con la NOM-035.</p>
+            <p>Aquí encontrarás herramientas para evaluar, monitorear y mejorar los factores psicosociales en tu trabajo.</p>
+        </div>
+        
+        <div class="card-grid">
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <h3>Test NOM-035</h3>
+                <p>Evalúa los factores de riesgo psicosocial en tu ambiente laboral siguiendo los lineamientos de la NOM-035.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <i class="fas fa-walking"></i>
+                </div>
+                <h3>Pausas activas</h3>
+                <p>Recibe recordatorios para realizar pausas activas durante tu jornada y reducir la fatiga laboral.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3>Diario emocional</h3>
+                <p>Registra tus emociones diarias y visualiza patrones para entender mejor tu bienestar emocional.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Consejos breves</h3>
+                <p>Accede a consejos prácticos sobre manejo del estrés, alimentación saludable y calidad del sueño.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3>Checklist NOM-035</h3>
+                <p>Realiza revisiones semanales de los factores de riesgo psicosocial en tu entorno laboral.</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>CalmaMente © 2025 - Aplicación de bienestar laboral en cumplimiento con la NOM-035</p>
+    </footer>
+    
+    <!-- Firebase -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6rG4W0b3vGW67lWW51CzGKzEPau0HsAw",
+            authDomain: "calmamente-12c56.firebaseapp.com",
+            projectId: "calmamente-12c56",
+            storageBucket: "calmamente-12c56.firebasestorage.app",
+            messagingSenderId: "1085057394046",
+            appId: "1:1085057394046:web:55060b389e27d3fe0fbf2f",
+            measurementId: "G-1N0E8M1VTB"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth();
+        
+        // Verificar si el usuario está autenticado
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Si el usuario está autenticado, mostrar su correo electrónico
+                document.getElementById("user-email").textContent = user.email;
+            } else {
+                // Si no está autenticado, redirigir a la página de autenticación
+                window.location.href = "auth.html";
+            }
+        });
+        
+        // Manejo de cierre de sesión
+        document.getElementById("logout-button").addEventListener("click", () => {
+            signOut(auth).then(() => {
+                // Redirigir a la página de autenticación
+                window.location.href = "auth.html";
+            }).catch((error) => {
+                console.error("Error al cerrar sesión:", error);
+            });
+        });
+    </script>
+</body>
+</html>
