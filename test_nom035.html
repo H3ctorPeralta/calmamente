@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test NOM-035 - CalmaMente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Estilos del header */
+        header {
+            background-color: #3b82f6;
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo i {
+            margin-right: 0.5rem;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-email {
+            margin-right: 1rem;
+        }
+        
+        .logout-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Estilos del menú de navegación */
+        nav {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-item {
+            margin: 0.5rem;
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-item i {
+            margin-right: 0.5rem;
+            font-size: 1.25rem;
+        }
+        
+        .nav-item:hover {
+            background-color: #f3f4f6;
+            color: #3b82f6;
+        }
+        
+        .nav-item.active {
+            background-color: #ebf5ff;
+            color: #3b82f6;
+        }
+        
+        /* Estilos del contenido principal */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            flex-grow: 1;
+        }
+        
+        .page-title {
+            color: #3b82f6;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            text-align: center;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .intro-text {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Estilos del formulario */
+        .question {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: #f9fafb;
+        }
+        
+        .question-text {
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+        
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            flex: 1 0 45%;
+        }
+        
+        .option:hover {
+            background-color: #ebf5ff;
+        }
+        
+        .option input {
+            margin-right: 0.5rem;
+        }
+        
+        .submit-button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .submit-button:hover {
+            background-color: #2563eb;
+        }
+        
+        /* Estilos de los resultados */
+        .results {
+            display: none;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+        
+        .results-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .results-summary {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .results-bar {
+            height: 1.5rem;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .results-bar-fill {
+            height: 100%;
+            background-color: #3b82f6;
+        }
+        
+        .results-level {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .results-recommendation {
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-left: 4px solid #3b82f6;
+            margin-bottom: 1rem;
+        }
+        
+        .results-actions {
+            margin-top: 1.5rem;
+        }
+        
+        .reset-button {
+            background-color: #6b7280;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        .reset-button:hover {
+            background-color: #4b5563;
+        }
+        
+        /* Estilos del footer */
+        footer {
+            background-color: #f3f4f6;
+            padding: 1.5rem;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: auto;
+        }
+        
+        /* Estilos responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+            
+            .nav-content {
+                flex-direction: column;
+            }
+            
+            .nav-item {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .options {
+                flex-direction: column;
+            }
+            
+            .option {
+                flex: 1 0 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-peace"></i>
+                <span>CalmaMente</span>
+            </div>
+            <div class="user-info">
+                <span class="user-email" id="user-email"></span>
+                <button class="logout-button" id="logout-button">Cerrar sesión</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Menú de navegación -->
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                Inicio
+            </a>
+            <a href="test_nom035.html" class="nav-item active">
+                <i class="fas fa-clipboard-check"></i>
+                Test NOM-035
+            </a>
+            <a href="pausas_activas.html" class="nav-item">
+                <i class="fas fa-walking"></i>
+                Pausas activas
+            </a>
+            <a href="diario_emocional.html" class="nav-item">
+                <i class="fas fa-book"></i>
+                Diario emocional
+            </a>
+            <a href="consejos_breves.html" class="nav-item">
+                <i class="fas fa-lightbulb"></i>
+                Consejos breves
+            </a>
+            <a href="checklist_nom035.html" class="nav-item">
+                <i class="fas fa-tasks"></i>
+                Checklist NOM-035
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Contenido principal -->
+    <main>
+        <h1 class="page-title">Test de Evaluación NOM-035</h1>
+        
+        <div class="card">
+            <p class="intro-text">
+                Este cuestionario está diseñado para evaluar los factores psicosociales en tu ambiente laboral, de acuerdo con la NOM-035. La información proporcionada es confidencial y te ayudará a identificar áreas de mejora para tu bienestar laboral.
+            </p>
+            
+            <form id="test-form">
+                <!-- Pregunta 1 -->
+                <div class="question">
+                    <p class="question-text">1. ¿Con qué frecuencia consideras que tienes una carga de trabajo excesiva?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="pregunta1" value="0" required> Nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta1" value="1"> Casi nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta1" value="2"> A veces
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta1" value="3"> Casi siempre
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta1" value="4"> Siempre
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 2 -->
+                <div class="question">
+                    <p class="question-text">2. ¿Tienes tiempo suficiente para realizar tus tareas laborales?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="pregunta2" value="4" required> Nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta2" value="3"> Casi nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta2" value="2"> A veces
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta2" value="1"> Casi siempre
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta2" value="0"> Siempre
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 3 -->
+                <div class="question">
+                    <p class="question-text">3. ¿Te sientes presionado por los plazos de entrega en tu trabajo?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="pregunta3" value="0" required> Nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta3" value="1"> Casi nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta3" value="2"> A veces
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta3" value="3"> Casi siempre
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta3" value="4"> Siempre
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 4 -->
+                <div class="question">
+                    <p class="question-text">4. ¿Puedes decidir cómo realizar tus tareas en el trabajo?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="pregunta4" value="4" required> Nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta4" value="3"> Casi nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta4" value="2"> A veces
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta4" value="1"> Casi siempre
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta4" value="0"> Siempre
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 5 -->
+                <div class="question">
+                    <p class="question-text">5. ¿Recibes apoyo de tus compañeros cuando lo necesitas?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="pregunta5" value="4" required> Nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta5" value="3"> Casi nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta5" value="2"> A veces
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta5" value="1"> Casi siempre
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta5" value="0"> Siempre
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 6 -->
+                <div class="question">
+                    <p class="question-text">6. ¿Has experimentado síntomas de estrés debido a tu trabajo (como dolor de cabeza, problemas de sueño, etc.)?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="pregunta6" value="0" required> Nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta6" value="1"> Casi nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta6" value="2"> A veces
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta6" value="3"> Casi siempre
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta6" value="4"> Siempre
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 7 -->
+                <div class="question">
+                    <p class="question-text">7. ¿Sientes que tu trabajo te permite mantener un equilibrio entre tu vida laboral y personal?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="pregunta7" value="4" required> Nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta7" value="3"> Casi nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta7" value="2"> A veces
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta7" value="1"> Casi siempre
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta7" value="0"> Siempre
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 8 -->
+                <div class="question">
+                    <p class="question-text">8. ¿Te sientes valorado en tu trabajo?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="pregunta8" value="4" required> Nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta8" value="3"> Casi nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta8" value="2"> A veces
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta8" value="1"> Casi siempre
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta8" value="0"> Siempre
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 9 -->
+                <div class="question">
+                    <p class="question-text">9. ¿Consideras que tu ambiente de trabajo es adecuado y seguro?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="pregunta9" value="4" required> Nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta9" value="3"> Casi nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta9" value="2"> A veces
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta9" value="1"> Casi siempre
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta9" value="0"> Siempre
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 10 -->
+                <div class="question">
+                    <p class="question-text">10. ¿Te sientes satisfecho con tu desempeño laboral?</p>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="pregunta10" value="4" required> Nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta10" value="3"> Casi nunca
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta10" value="2"> A veces
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta10" value="1"> Casi siempre
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="pregunta10" value="0"> Siempre
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-button">Enviar respuestas</button>
+            </form>
+            
+            <!-- Sección de resultados (inicialmente oculta) -->
+            <div id="results" class="results">
+                <h2 class="results-title">Resultados de tu evaluación</h2>
+                <p class="results-summary" id="results-summary"></p>
+                
+                <div class="results-bar">
+                    <div class="results-bar-fill" id="results-bar-fill"></div>
+                </div>
+                
+                <p class="results-level" id="results-level"></p>
+                
+                <div class="results-recommendation" id="results-recommendation"></div>
+                
+                <div class="results-actions">
+                    <button class="reset-button" id="reset-button">Realizar test nuevamente</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>CalmaMente © 2025 - Aplicación de bienestar laboral en cumplimiento con la NOM-035</p>
+    </footer>
+    
+    <!-- Firebase -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6rG4W0b3vGW67lWW51CzGKzEPau0HsAw",
+            authDomain: "calmamente-12c56.firebaseapp.com",
+            projectId: "calmamente-12c56",
+            storageBucket: "calmamente-12c56.firebasestorage.app",
+            messagingSenderId: "1085057394046",
+            appId: "1:1085057394046:web:55060b389e27d3fe0fbf2f",
+            measurementId: "G-1N0E8M1VTB"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth();
+        const db = getFirestore(app);
+        
+        let currentUser = null;
+        
+        // Verificar si el usuario está autenticado
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Si el usuario está autenticado, mostrar su correo electrónico
+                document.getElementById("user-email").textContent = user.email;
+                currentUser = user;
+            } else {
+                // Si no está autenticado, redirigir a la página de autenticación
+                window.location.href = "auth.html";
+            }
+        });
+        
+        // Manejo de cierre de sesión
+        document.getElementById("logout-button").addEventListener("click", () => {
+            signOut(auth).then(() => {
+                // Redirigir a la página de autenticación
+                window.location.href = "auth.html";
+            }).catch((error) => {
+                console.error("Error al cerrar sesión:", error);
+            });
+        });
+        
+        // Manejo del formulario de test
+        document.getElementById("test-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            // Recolectar los valores del formulario
+            const formData = new FormData(e.target);
+            let totalScore = 0;
+            let answeredQuestions = 0;
+            
+            // Calcular puntuación total
+            for (let i = 1; i <= 10; i++) {
+                const value = formData.get(`pregunta${i}`);
+                if (value !== null) {
+                    totalScore += parseInt(value);
+                    answeredQuestions++;
+                }
+            }
+            
+            // Calcular el nivel de riesgo
+            const score = (totalScore / (answeredQuestions * 4)) * 100;
+            let riskLevel = '';
+            let recommendation = '';
+            
+            if (score < 25) {
+                riskLevel = 'Riesgo bajo';
+                recommendation = 'Tu ambiente laboral parece estar en buenas condiciones. Continúa con las prácticas actuales y mantén el equilibrio entre trabajo y vida personal.';
+            } else if (score < 50) {
+                riskLevel = 'Riesgo medio';
+                recommendation = 'Existen algunos factores de riesgo psicosocial que deberían atenderse. Te recomendamos utilizar las pausas activas y comunicar tus inquietudes a tu supervisor.';
+            } else if (score < 75) {
+                riskLevel = 'Riesgo alto';
+                recommendation = 'Se identificaron varios factores de riesgo psicosocial importantes. Es recomendable que busques apoyo de tu área de recursos humanos y consideres técnicas de manejo del estrés.';
+            } else {
+                riskLevel = 'Riesgo muy alto';
+                recommendation = 'Se detectaron niveles críticos de factores de riesgo psicosocial. Es urgente que busques apoyo profesional y comuniques esta situación a tu supervisor o área de recursos humanos.';
+            }
+            
+            // Guardar los resultados en Firestore
+            try {
+                const testData = {
+                    userId: currentUser.uid,
+                    userEmail: currentUser.email,
+                    score: score,
+                    riskLevel: riskLevel,
+                    timestamp: serverTimestamp(),
+                    answers: {}
+                };
+                
+                // Guardar las respuestas individuales
+                for (let i = 1; i <= 10; i++) {
+                    testData.answers[`pregunta${i}`] = parseInt(formData.get(`pregunta${i}`));
+                }
+                
+                // Añadir documento a la colección test_nom035
+                await addDoc(collection(db, "test_nom035"), testData);
+                
+                // Mostrar resultados
+                document.getElementById("results-summary").textContent = `Tu puntuación es: ${score.toFixed(1)}% - ${riskLevel}`;
+                document.getElementById("results-level").textContent = `Nivel de riesgo: ${riskLevel}`;
+                document.getElementById("results-recommendation").textContent = recommendation;
+                
+                // Ajustar la barra de progreso
+                const barFill = document.getElementById("results-bar-fill");
+                barFill.style.width = `${score}%`;
+                
+                // Cambiar el color de la barra según el nivel de riesgo
+                if (score < 25) {
+                    barFill.style.backgroundColor = "#10b981"; // Verde
+                } else if (score < 50) {
+                    barFill.style.backgroundColor = "#f59e0b"; // Amarillo
+                } else if (score < 75) {
+                    barFill.style.backgroundColor = "#ef4444"; // Rojo
+                } else {
+                    barFill.style.backgroundColor = "#7f1d1d"; // Rojo oscuro
+                }
+                
+                // Mostrar la sección de resultados
+                document.getElementById("results").style.display = "block";
+                document.getElementById("test-form").style.display = "none";
+                
+            } catch (error) {
+                console.error("Error al guardar los resultados:", error);
+                alert("Ha ocurrido un error al guardar tus respuestas. Por favor, intenta nuevamente.");
+            }
+        });
+        
+        // Botón para reiniciar el test
+        document.getElementById("reset-button").addEventListener("click", () => {
+            document.getElementById("test-form").reset();
+            document.getElementById("results").style.display = "none";
+            document.getElementById("test-form").style.display = "block";
+        });
+    </script>
+</body>
+</html>
